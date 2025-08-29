@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=3 uid="uid://bsxm2kv2xt7k6"]
+
+[ext_resource type="Script" uid="uid://dedik0hfylst" path="res://basketball/basketball.gd" id="1_j8ag5"]
+[ext_resource type="PackedScene" uid="uid://ctr8r6c7kt86c" path="res://chicane/objects/ball.tscn" id="1_oq83f"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oq83f"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_j8ag5"]
+sky_material = SubResource("ProceduralSkyMaterial_oq83f")
+
+[sub_resource type="Environment" id="Environment_edmja"]
+background_mode = 2
+sky = SubResource("Sky_j8ag5")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ga00h"]
+albedo_color = Color(0.192197, 0.192197, 0.192197, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ga00h"]
+material = SubResource("StandardMaterial3D_ga00h")
+size = Vector2(20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oq83f"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_oq83f"]
+height = 0.236206
+
+[node name="Basketball" type="Node3D"]
+script = ExtResource("1_j8ag5")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_edmja")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.865151, -0.291941, 0.407779, 0, 0.813101, 0.582123, -0.501511, 0.503625, -0.703455, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.250732, 2.01513, 0)
+use_collision = true
+size = Vector3(0.498535, 4.0632, 1)
+
+[node name="Ball" parent="." instance=ExtResource("1_oq83f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.24896, 0.959809, -0.00317287)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.952428, 0, 0.304765, 0, 1, 0, -0.304765, 0, 0.952428, 4.22256, 2.02611, 3.87107)
+
+[node name="Floor" type="StaticBody3D" parent="."]
+process_physics_priority = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("PlaneMesh_ga00h")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0175595, 0, 0)
+shape = SubResource("BoxShape3D_oq83f")
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2.82504, 0)
+
+[node name="Sensor1" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01576, 2.82932, 0)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sensor1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.118103, 0)
+shape = SubResource("CylinderShape3D_oq83f")
+
+[connection signal="body_entered" from="Sensor1" to="." method="_on_sensor_1_body_entered"]

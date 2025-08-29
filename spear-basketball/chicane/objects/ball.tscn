@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://ctr8r6c7kt86c"]
+
+[ext_resource type="Script" uid="uid://y4wwfnawufi3" path="res://chicane/objects/ball.gd" id="1_c6nit"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0nco"]
+albedo_color = Color(1, 0.32549, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_tx5pi"]
+material = SubResource("StandardMaterial3D_n0nco")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_tx5pi"]
+radius = 0.2
+
+[node name="Ball" type="RigidBody3D"]
+can_sleep = false
+script = ExtResource("1_c6nit")
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_tx5pi")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_tx5pi")
+
+[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.367035, -0.1195, -0.28081)
+aabb = AABB(0.217232, 0, 0.105729, 0.372536, 0.416, 0.310542)
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier3D" to="." method="_on_visible_on_screen_notifier_3d_screen_exited"]

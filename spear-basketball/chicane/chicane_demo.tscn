@@ -1,0 +1,159 @@
+[gd_scene load_steps=14 format=3 uid="uid://bnpgqkcdq5wuy"]
+
+[ext_resource type="Script" uid="uid://3yrfcq20b03k" path="res://chicane/chicane_demo.gd" id="1_tx5pi"]
+[ext_resource type="PackedScene" uid="uid://ctr8r6c7kt86c" path="res://chicane/objects/ball.tscn" id="2_n0nco"]
+[ext_resource type="Texture2D" uid="uid://c01ke4wpeqx6m" path="res://icon.svg" id="3_xpsdt"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3j3a2"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_tx5pi"]
+sky_material = SubResource("ProceduralSkyMaterial_3j3a2")
+
+[sub_resource type="Environment" id="Environment_n0nco"]
+background_mode = 2
+sky = SubResource("Sky_tx5pi")
+tonemap_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tx5pi"]
+size = Vector3(20, 0.05, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tx5pi"]
+albedo_color = Color(0.122985, 0.122985, 0.122985, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_tx5pi"]
+material = SubResource("StandardMaterial3D_tx5pi")
+size = Vector2(20, 20)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tx5pi"]
+top_radius = 0.1
+bottom_radius = 0.3
+height = 0.35
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_tx5pi"]
+height = 0.05
+radius = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xpsdt"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3j3a2"]
+material = SubResource("StandardMaterial3D_xpsdt")
+top_radius = 1.5
+bottom_radius = 1.5
+height = 0.001
+
+[node name="ChicaneDemo" type="Node3D"]
+script = ExtResource("1_tx5pi")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_n0nco")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.998627, -0.0224976, 0.0473116, -1.87714e-08, 0.903096, 0.42944, -0.0523883, -0.42885, 0.901855, 0.077563, 1.44159, 2.72263)
+current = true
+
+[node name="Chicane" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Chicane"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Chicane/Floor"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("BoxShape3D_tx5pi")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Chicane/Floor"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("PlaneMesh_tx5pi")
+
+[node name="Stand" type="MeshInstance3D" parent="Chicane"]
+mesh = SubResource("CylinderMesh_tx5pi")
+metadata/_edit_lock_ = true
+
+[node name="Board" type="CharacterBody3D" parent="Chicane"]
+transform = Transform3D(1, 0, 0, 0, 0.999989, 0.00469492, 0, -0.00469492, 0.999989, 0, 0.278817, 0)
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="BoardCollision" type="CollisionShape3D" parent="Chicane/Board"]
+transform = Transform3D(1, -0.000872664, 0, 0.000872664, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_tx5pi")
+
+[node name="Mesh" type="MeshInstance3D" parent="Chicane/Board"]
+mesh = SubResource("CylinderMesh_3j3a2")
+skeleton = NodePath("../..")
+
+[node name="BoardObjects" type="Node3D" parent="Chicane/Board"]
+
+[node name="Sprite3D" type="Sprite3D" parent="Chicane/Board/BoardObjects"]
+transform = Transform3D(0.246556, -0.579585, 3.39994e-08, 0, -3.25713e-08, -1, 0.305135, 0.468318, -2.74723e-08, 0.238696, 0.00947618, 1.01701)
+modulate = Color(0, 0, 0, 1)
+texture = ExtResource("3_xpsdt")
+
+[node name="Sprite3D2" type="Sprite3D" parent="Chicane/Board/BoardObjects"]
+transform = Transform3D(0.359454, -0.298461, 1.75082e-08, -9.15427e-17, -3.25713e-08, -1, 0.157131, 0.68276, -4.00518e-08, 0.85238, 0.00947618, 0.318876)
+modulate = Color(0, 0, 0, 1)
+texture = ExtResource("3_xpsdt")
+
+[node name="Sprite3D3" type="Sprite3D" parent="Chicane/Board/BoardObjects"]
+transform = Transform3D(0.306597, 0.46486, -2.72694e-08, 0, -3.25713e-08, -1, -0.244736, 0.582362, -3.41623e-08, 0.869271, 0.00947618, -0.548165)
+modulate = Color(0, 0, 0, 1)
+texture = ExtResource("3_xpsdt")
+
+[node name="Sprite3D4" type="Sprite3D" parent="Chicane/Board/BoardObjects"]
+transform = Transform3D(-0.0501731, -0.739025, 4.33524e-08, 0, -3.25713e-08, -1, 0.389076, -0.0953007, 5.5905e-09, 0.216175, 0.00947618, -0.992946)
+modulate = Color(0, 0, 0, 1)
+texture = ExtResource("3_xpsdt")
+
+[node name="Sprite3D5" type="Sprite3D" parent="Chicane/Board/BoardObjects"]
+transform = Transform3D(0.280411, -0.521109, 3.05691e-08, 0, -3.25713e-08, -1, 0.274349, 0.532622, -3.12445e-08, -0.427701, 0.00947618, -0.767707)
+modulate = Color(0, 0, 0, 1)
+texture = ExtResource("3_xpsdt")
+
+[node name="Sprite3D6" type="Sprite3D" parent="Chicane/Board/BoardObjects"]
+transform = Transform3D(0.145871, -0.691716, 4.05772e-08, 0, -3.25713e-08, -1, 0.364169, 0.277073, -1.62535e-08, -1.06346, 0.00947618, -0.177907)
+modulate = Color(0, 0, 0, 1)
+texture = ExtResource("3_xpsdt")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Chicane/Board/BoardObjects"]
+transform = Transform3D(0.166795, 0.00372084, -0.792515, -0.00101767, 0.999991, 0.00183175, 0.216757, 0.00183175, 0.60985, -0.552498, 0.00900283, 0.874864)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0.301494, 0.0425453, 1, 0)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Chicane"]
+transform = Transform3D(-0.0206457, 0, -0.999787, 0, 1, 0, 0.999787, 0, -0.0206457, -2.22835, 0.423916, -0.641899)
+use_collision = true
+size = Vector3(0.0913696, 0.898735, 0.554626)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Chicane"]
+transform = Transform3D(-0.0206457, 0, -0.999787, 0, 1, 0, 0.999787, 0, -0.0206457, -2.31653, 0.351311, 0.37126)
+use_collision = true
+size = Vector3(0.0913696, 0.753525, 0.731018)
+
+[node name="Ball" parent="." instance=ExtResource("2_n0nco")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0623102, 0.876482, 2.46948)
+
+[node name="Releaser" type="Node3D" parent="."]
+transform = Transform3D(-0.0133688, 0, -0.999911, 0, 1, 0, 0.999911, 0, -0.0133688, -0.0559149, 0, -0.0370204)
+metadata/_edit_group_ = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Releaser"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.37853, 0.239014, 0)
+use_collision = true
+size = Vector3(0.938599, 0.521973, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Releaser"]
+transform = Transform3D(0.994631, -0.103487, 0.000252911, 0.103486, 0.994628, 0.00258822, -0.000519402, -0.00254815, 0.999997, 2.38701, 0.358008, 3.72529e-09)
+use_collision = true
+size = Vector3(1, 0.617676, 1)
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.216535, 0, 0, 0, -0.0223054, 0.854643, 0, -1.00298, -0.0190065, -2.56898, 0.0942984, -0.167497)
+texture = ExtResource("3_xpsdt")

@@ -1,0 +1,128 @@
+[gd_scene load_steps=10 format=3 uid="uid://bvmpbm0emx1t1"]
+
+[ext_resource type="Script" uid="uid://d1bad78ay4uoi" path="res://stage.gd" id="1_6eo5e"]
+[ext_resource type="Texture2D" uid="uid://dh1kbdc5ehx6o" path="res://assets/hexagonal-blue-glossy-metal-net-transparent-background-free-png.png" id="2_aees8"]
+[ext_resource type="Shader" uid="uid://cywew4t4if5dk" path="res://color_effect.gdshader" id="3_rnkuw"]
+[ext_resource type="Texture2D" uid="uid://846dgv0dnxb3" path="res://assets/shader_bg.png" id="4_gx6sy"]
+[ext_resource type="Texture2D" uid="uid://s7aaup8jnsef" path="res://assets/bullet.png" id="5_16g40"]
+
+[sub_resource type="Animation" id="Animation_aees8"]
+resource_name = "2Point"
+step = 0.05
+
+[sub_resource type="Animation" id="Animation_rnkuw"]
+resource_name = "3Point"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rnkuw"]
+_data = {
+&"2Point": SubResource("Animation_aees8"),
+&"3Point": SubResource("Animation_rnkuw")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gx6sy"]
+shader = ExtResource("3_rnkuw")
+shader_parameter/alpha_value = 0.0
+shader_parameter/point_color = Vector4(1, 1, 1, 0)
+
+[node name="Stage" type="Node2D"]
+script = ExtResource("1_6eo5e")
+game_time = 30
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color(0, 0, 0, 0.376471)
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="StartTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_rnkuw")
+}
+
+[node name="FinishSound" type="AudioStreamPlayer" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Hexagonal-blue-glossy-metal-net-transparent-background-free-png" type="Sprite2D" parent="CanvasLayer"]
+modulate = Color(0.12549, 0.2, 0.109804, 1)
+position = Vector2(960, 650.5)
+scale = Vector2(1, 1.00585)
+texture = ExtResource("2_aees8")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_gx6sy")
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("4_gx6sy")
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer"]
+offset_left = 640.0
+offset_top = 248.0
+offset_right = 1280.0
+offset_bottom = 640.0
+theme_override_font_sizes/font_size = 256
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer"]
+offset_left = 512.0
+offset_top = 640.0
+offset_right = 1408.0
+offset_bottom = 832.0
+theme_override_font_sizes/font_size = 128
+text = "0.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Stoplights" type="HBoxContainer" parent="."]
+modulate = Color(1, 0, 0, 1)
+offset_top = 64.0
+offset_right = 1920.0
+offset_bottom = 192.0
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Stoplights"]
+visible = false
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+texture = ExtResource("5_16g40")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="Stoplights"]
+visible = false
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+texture = ExtResource("5_16g40")
+expand_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="Stoplights"]
+visible = false
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+texture = ExtResource("5_16g40")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="Stoplights"]
+visible = false
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+texture = ExtResource("5_16g40")
+expand_mode = 1
+
+[node name="TextureRect5" type="TextureRect" parent="Stoplights"]
+visible = false
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+texture = ExtResource("5_16g40")
+expand_mode = 1
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
